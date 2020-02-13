@@ -11,4 +11,4 @@ To get started:
 
 Then follow the on-screen instructions to set up your repo.
 
-This repo contains Yenessa's portfolio and SPS projects.
+#This repo contains Yenessa's portfolio and SPS projects.

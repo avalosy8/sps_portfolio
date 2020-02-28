@@ -2,8 +2,47 @@
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  text-align: center;
 }
 
 #greeting-container {
   margin-top: 20px;
+}
+
+body {
+    font-family: garamond sans-serif;
+    background-color: thistle;
+}
+
+h1 {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;	
+    text-decoration: overline;
+    text-decoration-color: steelblue;
+}
+
+a:link {
+    font-style: italic;
+    color: steelblue;
+}
+
+img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%
+
+}
+
+#right {
+    float: right;
+    padding: 10px;
+}
+
+#left {
+    float: left;
+    padding: 10px;
+
+}
+
+#rotate_right {
+    transform: rotate(90deg)
 }

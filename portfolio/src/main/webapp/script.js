@@ -34,11 +34,25 @@ function getHelloPage() {
 }
 
 function handleResponse(response) {
-    const textPromise = response.text();
+    /*const textPromise = response.text();*/
+    const textPromise = response.json();
     textPromise.then(addPageToDom);
 }
 
 function addPageToDom(text) {
     const pageContainer = document.getElementById('greeting-container');
+    pageContainer.innerHTML = '';
+    pageContainer.appendChild(createHeadingElement(text));
+    /*
+    pageContainer.appendChild(document.createElement('h1'));
     pageContainer.innerText = text;
+    */
+    console.log('Fetched JSON string' + text);
+}
+
+/** Creates an <h2> element */
+function createHeadingElement(text) {
+    const hElement = document.createElement('h2');
+    hElement.innerText = text;
+    return hElement;
 }

@@ -28,7 +28,7 @@ function addRandomGreeting() {
 }
 
 
-function getHelloPage() {
+function getPageComments() {
     const responsePromise = fetch('/data');
     responsePromise.then(handleResponse);
 }
@@ -40,13 +40,9 @@ function handleResponse(response) {
 }
 
 function addPageToDom(text) {
-    const pageContainer = document.getElementById('greeting-container');
-    pageContainer.innerHTML = '';
+    const pageContainer = document.getElementById('page-comments');
     pageContainer.appendChild(createHeadingElement(text));
-    /*
-    pageContainer.appendChild(document.createElement('h1'));
-    pageContainer.innerText = text;
-    */
+    
     console.log('Fetched JSON string' + text);
 }
 
@@ -55,4 +51,11 @@ function createHeadingElement(text) {
     const hElement = document.createElement('h2');
     hElement.innerText = text;
     return hElement;
+}
+
+/** Creates an <li> element */
+function createListElement(text) {
+    const liElement = document.createElement('li');
+    liElement.innerText = text;
+    return liElement;
 }

@@ -28,17 +28,34 @@ function addRandomGreeting() {
 }
 
 
-function getHelloPage() {
+function getPageComments() {
     const responsePromise = fetch('/data');
     responsePromise.then(handleResponse);
 }
 
 function handleResponse(response) {
-    const textPromise = response.text();
+    /*const textPromise = response.text();*/
+    const textPromise = response.json();
     textPromise.then(addPageToDom);
 }
 
 function addPageToDom(text) {
-    const pageContainer = document.getElementById('greeting-container');
-    pageContainer.innerText = text;
+    const pageContainer = document.getElementById('page-comments');
+    pageContainer.appendChild(createHeadingElement(text));
+    
+    console.log('Fetched JSON string' + text);
+}
+
+/** Creates an <h2> element */
+function createHeadingElement(text) {
+    const hElement = document.createElement('h2');
+    hElement.innerText = text;
+    return hElement;
+}
+
+/** Creates an <li> element */
+function createListElement(text) {
+    const liElement = document.createElement('li');
+    liElement.innerText = text;
+    return liElement;
 }

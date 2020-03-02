@@ -32,9 +32,20 @@
 
        <p><a href="https://www.linkedin.com/in/yenavalos/" target="_blank">Check out my LinkedIn page!</a></p>
     
-    <button onclick="getHelloPage()">Click this</button>
-    <div id="greeting-container"></div>
+    <body onload="getPageComments()">
 
+    <form action="/data" method="POST">
+
+        <input type="text" name="user-comment">
+        <br/><br/>
+
+        <input type="submit" />
+
+    </form>
+
+    <ul id="page-comments"></ul>
+
+    </body>
 
     </div>    
   </body>

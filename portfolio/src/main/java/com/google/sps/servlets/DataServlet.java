@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,30 +27,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 import com.google.gson.Gson;
 
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+@WebServlet("/new-comment")
 public class DataServlet extends HttpServlet {
   
   /* Container to store comments */
-  ArrayList<String> comments = new ArrayList<String>();
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    // Send the JSON as a response
-    response.setContentType("application/json");
-    String json = convertToJsonUsingGson(comments);
-    response.getWriter().println(json);
-  }
-
+  /*List<String> comments = new ArrayList<String>();*/
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get input from the form
     String comment = request.getParameter("user-comment");
-    comments.add(comment);  
+    /*comments.add(comment);  */
+
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", comment);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
 
     // Redirect back to the HTML page
     response.sendRedirect("/index.html");
@@ -57,3 +60,5 @@ public class DataServlet extends HttpServlet {
     return json;
   }
 }
+
+

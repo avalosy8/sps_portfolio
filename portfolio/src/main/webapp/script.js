@@ -29,7 +29,7 @@ function addRandomGreeting() {
 
 
 function getPageComments() {
-    const responsePromise = fetch('/data');
+    const responsePromise = fetch('/list-comments');
     responsePromise.then(handleResponse);
 }
 
@@ -42,8 +42,6 @@ function handleResponse(response) {
 function addPageToDom(text) {
     const pageContainer = document.getElementById('page-comments');
     pageContainer.appendChild(createHeadingElement(text));
-    
-    console.log('Fetched JSON string' + text);
 }
 
 /** Creates an <h2> element */

@@ -20,6 +20,11 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,27 +35,42 @@ import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
 
-
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/new-comment")
 public class DataServlet extends HttpServlet {
   
-  /* Container to store comments */
-  /*List<String> comments = new ArrayList<String>();*/
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get input from the form
-    String comment = request.getParameter("user-comment");
-    /*comments.add(comment);  */
+    String text = request.getParameter("user-comment");
+
+     // Retrieve a sentiment score of this comment
+    Document doc =
+        Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float sentimentScore = sentiment.getScore();
+    languageService.close();
+
+    long timestamp = System.currentTimeMillis();
 
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("comment", comment);
+    commentEntity.setProperty("text", text);
+    commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("sentimentScore", sentimentScore);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
+    response.setContentType("text/html;");
+    response.getWriter().println("<h1>Sentiment Analysis</h1>");
+    response.getWriter().println("<p>You entered: " + text + "</p>");
+    response.getWriter().println("<p>Sentiment analysis score: " + sentimentScore + "</p>");
+    response.getWriter().println("<p><a href=\"/\">Back</a></p>");
+  
+
     // Redirect back to the HTML page
-    response.sendRedirect("/index.html");
+    //response.sendRedirect("/index.html");
   }
 
 /** Converts ArrayList object to JSON string **/

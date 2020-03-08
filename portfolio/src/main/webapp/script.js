@@ -34,14 +34,15 @@ function getPageComments() {
 }
 
 function handleResponse(response) {
-    /*const textPromise = response.text();*/
     const textPromise = response.json();
     textPromise.then(addPageToDom);
 }
 
-function addPageToDom(text) {
+function addPageToDom(comments) {
     const pageContainer = document.getElementById('page-comments');
-    pageContainer.appendChild(createHeadingElement(text));
+    comments.forEach((comment) => {
+        pageContainer.appendChild(createCommentElement(comment));
+    })
 }
 
 /** Creates an <h2> element */
@@ -56,4 +57,16 @@ function createListElement(text) {
     const liElement = document.createElement('li');
     liElement.innerText = text;
     return liElement;
+}
+
+/** Creates an element that represents a comment */
+function createCommentElement(comment) {
+     const commentElement = document.createElement('li');
+     commentElement.className = 'comment';
+
+     const textElement = document.createElement('span');
+     textElement.innerText = comment.text;
+
+     commentElement.appendChild(textElement);
+     return commentElement;
 }

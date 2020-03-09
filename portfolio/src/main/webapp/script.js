@@ -31,6 +31,7 @@ function addRandomGreeting() {
 function getPageComments() {
     const responsePromise = fetch('/list-comments');
     responsePromise.then(handleResponse);
+    console.log('inside getPageComments()');
 }
 
 function handleResponse(response) {
@@ -45,6 +46,18 @@ function addPageToDom(comments) {
     })
 }
 
+/** Creates an element that represents a comment */
+function createCommentElement(comment) {
+     const commentElement = document.createElement('li');
+     commentElement.className = 'comment';
+
+     const textElement = document.createElement('span');
+     textElement.innerText = comment.text + " " + comment.score;
+
+     commentElement.appendChild(textElement);
+     return commentElement;
+}
+
 /** Creates an <h2> element */
 function createHeadingElement(text) {
     const hElement = document.createElement('h2');
@@ -57,16 +70,4 @@ function createListElement(text) {
     const liElement = document.createElement('li');
     liElement.innerText = text;
     return liElement;
-}
-
-/** Creates an element that represents a comment */
-function createCommentElement(comment) {
-     const commentElement = document.createElement('li');
-     commentElement.className = 'comment';
-
-     const textElement = document.createElement('span');
-     textElement.innerText = comment.text;
-
-     commentElement.appendChild(textElement);
-     return commentElement;
 }

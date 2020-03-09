@@ -49,7 +49,7 @@ public class DataServlet extends HttpServlet {
         Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
     LanguageServiceClient languageService = LanguageServiceClient.create();
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    float sentimentScore = sentiment.getScore();
+    double score = sentiment.getScore();
     languageService.close();
 
     long timestamp = System.currentTimeMillis();
@@ -57,7 +57,7 @@ public class DataServlet extends HttpServlet {
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
-    commentEntity.setProperty("sentimentScore", sentimentScore);
+    commentEntity.setProperty("score", score);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -65,20 +65,11 @@ public class DataServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.getWriter().println("<h1>Sentiment Analysis</h1>");
     response.getWriter().println("<p>You entered: " + text + "</p>");
-    response.getWriter().println("<p>Sentiment analysis score: " + sentimentScore + "</p>");
+    response.getWriter().println("<p>Sentiment analysis score: " + score + "</p>");
     response.getWriter().println("<p><a href=\"/\">Back</a></p>");
   
 
     // Redirect back to the HTML page
-    //response.sendRedirect("/index.html");
-  }
-
-/** Converts ArrayList object to JSON string **/
-  private String convertToJsonUsingGson(ArrayList list) {
-    Gson gson = new Gson();
-    String json = gson.toJson(list);
-    return json;
+    response.sendRedirect("/index.html");
   }
 }
-
-

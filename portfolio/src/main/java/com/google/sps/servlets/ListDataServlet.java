@@ -23,7 +23,7 @@ public class ListDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
  
-     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
@@ -34,9 +34,13 @@ public class ListDataServlet extends HttpServlet {
         String name = (String) entity.getProperty("name");
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        float sentimentScore = (float) entity.getProperty("sentimentScore");
+        double score = 0.0;
 
-        Comment comment = new Comment(id, name, text, timestamp, sentimentScore);
+        // Check if Comment has a sentiment score (may not if comment was created before this feature was added)
+        if(entity.getProperty("score") != null)
+            score = (double) entity.getProperty("score");
+        
+        Comment comment = new Comment(id, name, text, timestamp, score);
         comments.add(comment);
 
     }
